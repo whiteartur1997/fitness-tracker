@@ -1,0 +1,34 @@
+<mat-nav-list>
+  <ng-container *ngIf="!isAuth; else authenticated">
+    <a mat-list-item routerLink="/signup" (click)="closeSidenav.emit()">
+      <div fxLayout fxLayoutAlign="flex-start center">
+        <mat-icon>app_registration</mat-icon>
+        <span class="nav-caption">Signup</span>
+      </div>
+    </a>
+    <a mat-list-item routerLink="/login" (click)="closeSidenav.emit()">
+      <div fxLayout fxLayoutAlign="flex-start center">
+        <mat-icon>login</mat-icon>
+        <span class="nav-caption">Login</span>
+      </div>
+    </a>
+  </ng-container>
+  <ng-template #authenticated>
+    <a mat-list-item routerLink="/trainings" (click)="closeSidenav.emit()">
+      <div fxLayout fxLayoutAlign="flex-start center">
+        <mat-icon>fitness_center</mat-icon>
+        <span class="nav-caption">Trainings</span>
+      </div>
+    </a>
+    <button
+      class="logout-btn"
+      mat-list-item
+      color="primary"
+      (click)="onLogout()">
+      <div class="logout-btn-content">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-caption">Logout</span>
+      </div>
+    </button>
+  </ng-template>
+</mat-nav-list>
