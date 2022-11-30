@@ -1,6 +1,5 @@
 import { TrainingModel } from './training.model';
 import { Subject } from 'rxjs';
-import { TrainingComponent } from './training.component';
 
 export class TrainingService {
   private availableTrainings: TrainingModel[] = [
@@ -9,6 +8,7 @@ export class TrainingService {
     { id: 'side-lunges', name: 'Side Lunges', duration: 120, caloriesBurn: 18 },
     { id: 'burpees', name: 'Burpees', duration: 60, caloriesBurn: 8 },
   ];
+  private doneTrainings: TrainingModel[] = [];
   private ongoingTraining: TrainingModel | null;
   ongoingTrainingChanged = new Subject<TrainingModel | null>();
   constructor() {
@@ -24,5 +24,37 @@ export class TrainingService {
       training => training.id === id
     )!;
     this.ongoingTrainingChanged.next({ ...this.ongoingTraining });
+  }
+
+  completeTraining() {
+    this.doneTrainings.push({
+      ...this.ongoingTraining!,
+      date: new Date(),
+      state: 'completed',
+    });
+    this.ongoingTraining = null;
+    this.ongoingTrainingChanged.next(null);
+    console.log(this.doneTrainings);
+  }
+
+  cancelTraining(progress: number) {
+    this.doneTrainings.push({
+      ...this.ongoingTraining!,
+      date: new Date(),
+      duration: (this.ongoingTraining!.duration * progress) / 100,
+      caloriesBurn: (this.ongoingTraining!.caloriesBurn * progress) / 100,
+      state: 'cancelled',
+    });
+    this.ongoingTraining = null;
+    this.ongoingTrainingChanged.next(null);
+    console.log(this.doneTrainings);
+  }
+
+  getOngoingTraining() {
+    return this.ongoingTraining;
+  }
+
+  getDoneTrainings() {
+    return this.doneTrainings.slice();
   }
 }
